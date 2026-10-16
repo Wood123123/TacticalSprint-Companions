@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>TacticalSprintSpeedFix</AssemblyName>
+    <RootNamespace>TacticalSprintSpeedFix</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <DebugType>none</DebugType>
+    <NoWarn>CS0618;CS0612;CS0169;CS0649;CS0067;CS8632;CS0436</NoWarn>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         指向你的 SPT 安装目录（含 EscapeFromTarkov.exe 和 BepInEx）。
+
+         两种改法：
+           ① 直接改下面这行的默认值
+           ② 命令行覆盖（推荐，不动文件）：
+              dotnet build -c Release -p:EFT_DIR="D:\MySPT"
+         ═══════════════════════════════════════════════════════════ -->
+    <EFT_DIR Condition="'$(EFT_DIR)' == ''">C:\SPT</EFT_DIR>
+  </PropertyGroup>
+
+  <!-- 路径不对时立刻报清楚，而不是抛一堆找不到 dll 的错误 -->
+  <Target Name="CheckEftDir" BeforeTargets="ResolveAssemblyReferences">
+    <Error Condition="!Exists('$(EFT_DIR)\EscapeFromTarkov.exe')"
+           Text="找不到 SPT 安装目录：'$(EFT_DIR)'。请用 -p:EFT_DIR=&quot;你的路径&quot; 指定，例如 dotnet build -c Release -p:EFT_DIR=&quot;D:\MySPT&quot;" />
+  </Target>
+
+  <ItemGroup>
+    <Reference Include="0Harmony"><HintPath>$(EFT_DIR)\BepInEx\core\0Harmony.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="BepInEx"><HintPath>$(EFT_DIR)\BepInEx\core\BepInEx.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Assembly-CSharp"><HintPath>$(EFT_DIR)\EscapeFromTarkov_Data\Managed\Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Comfort"><HintPath>$(EFT_DIR)\EscapeFromTarkov_Data\Managed\Comfort.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine"><HintPath>$(EFT_DIR)\EscapeFromTarkov_Data\Managed\UnityEngine.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.CoreModule"><HintPath>$(EFT_DIR)\EscapeFromTarkov_Data\Managed\UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+
+</Project>

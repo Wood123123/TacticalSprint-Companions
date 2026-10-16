@@ -1,0 +1,12 @@
+# 构建产物
+bin/
+obj/
+*.user
+*.suo
+.vs/
+.idea/
+*.pdb
+
+# 操作系统
+Thumbs.db
+desktop.ini
